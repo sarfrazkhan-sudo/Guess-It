@@ -2,11 +2,13 @@
   "name": "Guess It!",
   "short_name": "GuessIt",
   "description": "A fun 2-player number guessing game. Set secret numbers, take turns guessing, and celebrate the winner!",
-  "start_url": "/",
-  "scope": "/",
-  "display": "fullscreen",
-  "display_override": ["window-controls-overlay", "fullscreen"],
+  "id": "./index.html",
+  "start_url": "./index.html",
+  "dir": "ltr",
+  "scope": "./",
+  "lang": "en",
   "orientation": "portrait",
+  "display": "standalone",
   "background_color": "#0f0e17",
   "theme_color": "#6C63FF",
   "categories": ["games", "entertainment"],
@@ -15,8 +17,13 @@
       "src": "icon.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
-  ],
-  "id": "guess-it-app"
+  ]
 }
