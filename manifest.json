@@ -1,8 +1,8 @@
 {
   "name": "Guess It!",
   "short_name": "GuessIt",
-  "description": "2-player number guessing game. Set secret numbers and guess your opponent's number!",
-  "start_url": "/index.html",
+  "description": "A fun 2-player number guessing game. Set secret numbers, take turns guessing, and celebrate the winner!",
+  "start_url": "/",
   "scope": "/",
   "display": "fullscreen",
   "display_override": ["window-controls-overlay", "fullscreen"],
