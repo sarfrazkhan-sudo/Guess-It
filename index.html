@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Guess It!</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+    
+    <!-- iOS Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Guess It!">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#6C63FF">
+</head>
+<body>
+
+<!-- ===== SCREEN 1: LOADING ===== -->
+<div id="loadingScreen" class="screen active">
+    <div class="loading-icon">🎯</div>
+    <div class="loading-title">Guess It!</div>
+    <div class="loading-developer">DEVELOPER: SARFRAZ KHAN</div>
+    <div class="loading-bar-container">
+        <div class="loading-bar" id="loadingBar"></div>
+    </div>
+    <div class="loading-text" id="loadingText">Loading...</div>
+</div>
+
+<!-- ===== SCREEN 2: START ===== -->
+<div id="startScreen" class="screen">
+    <div class="game-logo">🎯</div>
+    <div class="game-title">Guess It!</div>
+    <div class="game-subtitle">Each player sets a secret number. First to guess wins!</div>
+    
+    <div class="input-group">
+        <label>👤 PLAYER 1</label>
+        <input type="text" id="player1Name" placeholder="Enter name" value="Player 1" maxlength="15">
+    </div>
+    <div class="input-group">
+        <label>👤 PLAYER 2</label>
+        <input type="text" id="player2Name" placeholder="Enter name" value="Player 2" maxlength="15">
+    </div>
+    
+    <!-- Difficulty Button -->
+    <div class="difficulty-btn" onclick="toggleDifficulty()">
+        <span id="diffDisplay">⚡ Medium</span>
+        <span class="arrow" id="diffArrow">▼</span>
+    </div>
+    <div class="difficulty-popup" id="diffPopup">
+        <div class="difficulty-option" onclick="selectDifficulty('easy')">
+            <span>🟢 Easy</span>
+            <span class="diff-badge easy">1-50 · 15 tries</span>
+        </div>
+        <div class="difficulty-option selected" onclick="selectDifficulty('medium')" id="diffMedium">
+            <span>🟡 Medium</span>
+            <span class="diff-badge medium">1-100 · 10 tries</span>
+        </div>
+        <div class="difficulty-option" onclick="selectDifficulty('hard')">
+            <span>🔴 Hard</span>
+            <span class="diff-badge hard">1-200 · 7 tries</span>
+        </div>
+    </div>
+    
+    <!-- Settings Row -->
+    <div class="settings-row">
+        <div class="settings-item">
+            🔊 <input type="range" id="volumeSlider" min="0" max="100" value="50" onchange="changeVolume(this.value)">
+        </div>
+        <div class="theme-toggle">
+            🌙
+            <div class="toggle-track" id="themeToggle" onclick="toggleTheme()">
+                <div class="toggle-dot"></div>
+            </div>
+            ☀️
+        </div>
+    </div>
+    
+    <button class="btn btn-primary" onclick="startGame()">▶ START GAME</button>
+</div>
+
+<!-- ===== SCREEN 3: PLAYER 1 SECRET ===== -->
+<div id="secretScreen" class="screen">
+    <div class="secret-icon">🔒</div>
+    <div class="secret-title" id="secretTitle1">Player 1: Set Secret Number</div>
+    <!-- CHANGE 1: Added placeholder text -->
+    <div class="secret-display" id="secretDisplay1">
+        <span class="placeholder-text">Enter your secret number</span>
+    </div>
+    <div class="secret-hint">Enter a number between 1 and <span id="secretRange1">100</span></div>
+    
+    <div class="num-pad">
+        <button class="number-btn" onclick="numPad1('1')">1</button>
+        <button class="number-btn" onclick="numPad1('2')">2</button>
+        <button class="number-btn" onclick="numPad1('3')">3</button>
+        <button class="number-btn btn-x" onclick="numPad1('delete')">✕</button>
+        
+        <button class="number-btn" onclick="numPad1('4')">4</button>
+        <button class="number-btn" onclick="numPad1('5')">5</button>
+        <button class="number-btn" onclick="numPad1('6')">6</button>
+        <button class="number-btn btn-enter" onclick="confirmSecret1()">✓</button>
+        
+        <button class="number-btn" onclick="numPad1('7')">7</button>
+        <button class="number-btn" onclick="numPad1('8')">8</button>
+        <button class="number-btn" onclick="numPad1('9')">9</button>
+        <button class="number-btn" onclick="numPad1('0')">0</button>
+    </div>
+</div>
+
+<!-- ===== SCREEN 4: PLAYER 2 SECRET ===== -->
+<div id="secretScreen2" class="screen">
+    <div class="secret-icon">🔒</div>
+    <div class="secret-title" id="secretTitle2">Player 2: Set Secret Number</div>
+    <!-- CHANGE 1: Added placeholder text -->
+    <div class="secret-display" id="secretDisplay2">
+        <span class="placeholder-text">Enter your secret number</span>
+    </div>
+    <div class="secret-hint">Enter a number between 1 and <span id="secretRange2">100</span></div>
+    
+    <div class="num-pad">
+        <button class="number-btn" onclick="numPad2('1')">1</button>
+        <button class="number-btn" onclick="numPad2('2')">2</button>
+        <button class="number-btn" onclick="numPad2('3')">3</button>
+        <button class="number-btn btn-x" onclick="numPad2('delete')">✕</button>
+        
+        <button class="number-btn" onclick="numPad2('4')">4</button>
+        <button class="number-btn" onclick="numPad2('5')">5</button>
+        <button class="number-btn" onclick="numPad2('6')">6</button>
+        <button class="number-btn btn-enter" onclick="confirmSecret2()">✓</button>
+        
+        <button class="number-btn" onclick="numPad2('7')">7</button>
+        <button class="number-btn" onclick="numPad2('8')">8</button>
+        <button class="number-btn" onclick="numPad2('9')">9</button>
+        <button class="number-btn" onclick="numPad2('0')">0</button>
+    </div>
+</div>
+
+<!-- ===== SCREEN 5: GAMEPLAY ===== -->
+<div id="gameScreen" class="screen">
+    <div class="game-header">
+        <span class="game-header-title">🎯 Guess It!</span>
+        <span class="game-header-score">🏆 <span id="scoreDisplay">0-0</span></span>
+    </div>
+    
+    <div class="turn-indicator">
+        <div class="turn-label">🎯 CURRENT TURN</div>
+        <div class="player-name" id="turnPlayerName">Player 1</div>
+        <div class="turn-label" id="turnTargetLabel">Guessing Player 2's number</div>
+    </div>
+    
+    <div class="guess-area">
+        <!-- CHANGE 2: Added placeholder text -->
+        <div class="guess-display" id="guessDisplay">
+            <span class="placeholder-text">Enter your guess</span>
+        </div>
+        
+        <div class="num-pad" style="max-width: 320px;">
+            <button class="number-btn" onclick="numGuess('1')">1</button>
+            <button class="number-btn" onclick="numGuess('2')">2</button>
+            <button class="number-btn" onclick="numGuess('3')">3</button>
+            <button class="number-btn btn-x" onclick="numGuess('delete')">✕</button>
+            
+            <button class="number-btn" onclick="numGuess('4')">4</button>
+            <button class="number-btn" onclick="numGuess('5')">5</button>
+            <button class="number-btn" onclick="numGuess('6')">6</button>
+            <button class="number-btn btn-enter" onclick="makeGuess()">✓</button>
+            
+            <button class="number-btn" onclick="numGuess('7')">7</button>
+            <button class="number-btn" onclick="numGuess('8')">8</button>
+            <button class="number-btn" onclick="numGuess('9')">9</button>
+            <button class="number-btn" onclick="numGuess('0')">0</button>
+        </div>
+    </div>
+    
+    <div class="hint-box hint-empty" id="hintBox">💡 Make your guess</div>
+    
+    <div class="attempts-bar">
+        <div class="attempts-label">
+            <span>🎯 Attempts</span>
+            <span id="attemptsText">0 / <span id="maxAttemptsText">10</span></span>
+        </div>
+        <div class="attempts-track">
+            <div class="attempts-fill" id="attemptsFill" style="width: 0%"></div>
+        </div>
+    </div>
+    
+    <!-- CHANGE 2: History box - reduced height and moved up -->
+    <div class="history-box" id="historyBox">
+        <div class="history-empty">📜 No guesses yet</div>
+    </div>
+    
+    <button class="btn btn-secondary" onclick="endGame()">🚪 End Game</button>
+</div>
+
+<!-- ===== SCREEN 6: WINNER ===== -->
+<div id="winnerScreen" class="screen">
+    <div class="winner-icon">🏆</div>
+    <div class="winner-title">Winner!</div>
+    <div class="winner-name" id="winnerName">Player 1</div>
+    <div class="winner-stats" id="winnerStats">Guessed correctly in 5 attempts!</div>
+    <div class="btn-group">
+        <button class="btn btn-primary" onclick="rematch()">🔄 Rematch</button>
+        <button class="btn btn-secondary" onclick="goHome()">🏠 Home</button>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script src="script.js"></script>
+
+<!-- Service Worker Registration -->
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./service-worker.js')
+                .then(() => console.log('SW registered'))
+                .catch(() => console.log('SW failed'));
+        });
+    }
+</script>
+
+</body>
+</html>

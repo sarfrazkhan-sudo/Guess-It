@@ -1,0 +1,22 @@
+{
+  "name": "Guess It!",
+  "short_name": "GuessIt",
+  "description": "2-player number guessing game. Set secret numbers and guess your opponent's number!",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "fullscreen",
+  "display_override": ["window-controls-overlay", "fullscreen"],
+  "orientation": "portrait",
+  "background_color": "#0f0e17",
+  "theme_color": "#6C63FF",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "id": "guess-it-app"
+}
