@@ -1,0 +1,10 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.github.sarfrazkhan_sudo.twa",
+      "sha256_cert_fingerprints": ["C8:9B:6B:73:A0:4B:EE:0E:3C:DC:7B:4D:1B:8E:77:0C:E4:34:EC:3E:AB:7E:6C:9A:CB:1B:30:98:67:1E:E1:3D"]
+    }
+  }
+]
