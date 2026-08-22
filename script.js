@@ -1,4 +1,19 @@
 // ============================================
+// AD TEST MODE - ENABLE FOR DEVELOPMENT
+// ============================================
+window.adsbygoogle = window.adsbygoogle || [];
+
+// Enable test mode for your device
+function enableTestAds() {
+    (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-1956830239755898",
+        enable_page_level_ads: true
+    });
+}
+
+// Call this function when game loads
+enableTestAds();
+// ============================================
 // GAME STATE
 // ============================================
 const state = {
