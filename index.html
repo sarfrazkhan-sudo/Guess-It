@@ -200,10 +200,10 @@
     <button class="btn btn-secondary" onclick="endGame()">🚪 End Game</button>
 </div>
 
-<!-- ===== SCREEN 6: WINNER ===== -->
+<!-- ===== SCREEN 6: WINNER / DRAW ===== -->
 <div id="winnerScreen" class="screen">
-    <div class="winner-icon">🏆</div>
-    <div class="winner-title">Winner!</div>
+    <div class="winner-icon" id="winnerIcon">🏆</div>
+    <div class="winner-title" id="winnerTitle">Winner!</div>
     <div class="winner-name" id="winnerName">Player 1</div>
     <div class="winner-stats" id="winnerStats">Guessed correctly in 5 attempts!</div>
     <div class="btn-group">
@@ -211,7 +211,6 @@
         <button class="btn btn-secondary" onclick="goHome()">🏠 Home</button>
     </div>
 </div>
-
 <!-- JavaScript -->
 <script src="script.js"></script>
 
