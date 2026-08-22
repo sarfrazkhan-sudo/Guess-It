@@ -91,7 +91,7 @@ function selectDifficulty(diff) {
 }
 
 // ============================================
-// SOUND - IMPROVED VERSION
+// SOUND
 // ============================================
 let audioCtx = null;
 
@@ -115,7 +115,6 @@ function playSound(type) {
         masterGain.gain.value = state.volume * 0.5;
 
         if (type === 'click') {
-            // Short click sound
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.connect(gain);
@@ -128,7 +127,6 @@ function playSound(type) {
             osc.stop(ctx.currentTime + 0.08);
         } 
         else if (type === 'correct') {
-            // Happy ascending sound
             const notes = [523, 659, 784];
             notes.forEach((freq, i) => {
                 const osc = ctx.createOscillator();
@@ -145,7 +143,6 @@ function playSound(type) {
             });
         } 
         else if (type === 'high') {
-            // Descending sound for too high
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.connect(gain);
@@ -159,7 +156,6 @@ function playSound(type) {
             osc.stop(ctx.currentTime + 0.2);
         } 
         else if (type === 'low') {
-            // Ascending sound for too low
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.connect(gain);
@@ -173,7 +169,6 @@ function playSound(type) {
             osc.stop(ctx.currentTime + 0.2);
         } 
         else if (type === 'win') {
-            // 🎉 WINNER SOUND - Celebration!
             const melody = [523, 523, 523, 659, 784, 659, 784];
             const durations = [0.15, 0.15, 0.15, 0.2, 0.2, 0.2, 0.3];
             melody.forEach((freq, i) => {
@@ -191,7 +186,6 @@ function playSound(type) {
             });
         } 
         else if (type === 'error') {
-            // Error/buzzer sound
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.connect(gain);
@@ -204,7 +198,6 @@ function playSound(type) {
             osc.stop(ctx.currentTime + 0.3);
         }
         else if (type === 'back') {
-            // Back button sound
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.connect(gain);
@@ -240,7 +233,7 @@ function startGame() {
 }
 
 // ============================================
-// SECRET 1 - Number Pad
+// SECRET 1
 // ============================================
 function numPad1(val) {
     if (state.p1Secret !== null) return;
@@ -283,7 +276,7 @@ function confirmSecret1() {
 }
 
 // ============================================
-// SECRET 2 - Number Pad
+// SECRET 2
 // ============================================
 function numPad2(val) {
     if (state.p2Secret !== null) return;
@@ -382,17 +375,21 @@ function numGuess(val) {
     updateGuessDisplay();
 }
 
+// ============================================
+// MAKE GUESS (FIXED - DRAW SYSTEM)
+// ============================================
 function makeGuess() {
     if (state.isGameOver) return;
+    
     const num = parseInt(state.currentGuess);
     if (!num || num < 1 || num > state.maxRange) {
+        playSound('error');
         alert('Please enter a valid number between 1 and ' + state.maxRange);
         return;
     }
     
     const isP1 = state.currentPlayer === 1;
     const secret = isP1 ? state.p2Secret : state.p1Secret;
-    const opponent = isP1 ? state.p2Name : state.p1Name;
     
     let hint = '';
     let hintClass = '';
@@ -412,7 +409,7 @@ function makeGuess() {
         playSound('low');
     }
     
-    // Track attempts
+    // Track attempts and history
     if (isP1) {
         state.p1Attempts++;
         state.p1GuessHistory.push({ guess: num, hint: hint });
@@ -427,7 +424,7 @@ function makeGuess() {
     
     addHistory(isP1, num, hint);
     
-    // === WINNER CHECK ===
+    // ==== CHECK: CORRECT GUESS =====
     if (isCorrect) {
         if (isP1) {
             state.p1Wins++;
@@ -440,34 +437,30 @@ function makeGuess() {
         return;
     }
     
-    // === CHECK IF BOTH PLAYERS FINISHED ATTEMPTS ===
-    const totalAttempts = state.p1Attempts + state.p2Attempts;
-    const maxTotal = state.maxAttempts * 2;
-    
-    if (totalAttempts >= maxTotal) {
-        // Both players have used all attempts - DRAW!
+    // ==== CHECK: BOTH PLAYERS FINISHED ALL ATTEMPTS =====
+    if (state.p1Attempts >= state.maxAttempts && state.p2Attempts >= state.maxAttempts) {
         showDraw();
         state.isGameOver = true;
         return;
     }
     
-    // === CHECK IF CURRENT PLAYER FINISHED ATTEMPTS ===
+    // ==== CHECK: CURRENT PLAYER FINISHED ATTEMPTS =====
     const currentAttempts = isP1 ? state.p1Attempts : state.p2Attempts;
     if (currentAttempts >= state.maxAttempts) {
-        // Current player finished, switch to other player
+        // Switch to other player
         state.currentPlayer = isP1 ? 2 : 1;
         state.currentGuess = '';
         updateGuessDisplay();
         updateGameUI();
         updateScoreDisplay();
         
-        // Show notification
-        hintBox.textContent = '⏳ ' + (isP1 ? state.p2Name : state.p1Name) + '\'s turn now!';
+        const nextPlayer = isP1 ? state.p2Name : state.p1Name;
+        hintBox.textContent = '⏳ ' + nextPlayer + '\'s turn now!';
         hintBox.className = 'hint-box hint-empty';
         return;
     }
     
-    // === SWITCH TURN ===
+    // ==== SWITCH TURN (Normal) =====
     state.currentPlayer = isP1 ? 2 : 1;
     state.currentGuess = '';
     updateGuessDisplay();
@@ -475,6 +468,9 @@ function makeGuess() {
     updateScoreDisplay();
 }
 
+// ============================================
+// HISTORY
+// ============================================
 function addHistory(isP1, guess, hint) {
     const box = document.getElementById('historyBox');
     const emptyMsg = box.querySelector('.history-empty');
@@ -493,22 +489,41 @@ function addHistory(isP1, guess, hint) {
 // WINNER
 // ============================================
 function showWinner(name, attempts) {
-    // Play winner sound with celebration!
     playSound('win');
-    
-    // Also play multiple sounds for celebration effect
     setTimeout(() => playSound('win'), 300);
     setTimeout(() => playSound('win'), 600);
     
     setTimeout(() => {
         document.getElementById('gameScreen').classList.remove('active');
         document.getElementById('winnerScreen').classList.add('active');
+        document.getElementById('winnerIcon').textContent = '🏆';
+        document.getElementById('winnerTitle').textContent = 'Winner!';
         document.getElementById('winnerName').textContent = name + ' 🎉';
         document.getElementById('winnerStats').textContent = 'Guessed correctly in ' + attempts + ' attempts!';
         updateScoreDisplay();
     }, 200);
 }
 
+// ============================================
+// DRAW
+// ============================================
+function showDraw() {
+    playSound('error');
+    
+    setTimeout(() => {
+        document.getElementById('gameScreen').classList.remove('active');
+        document.getElementById('winnerScreen').classList.add('active');
+        document.getElementById('winnerIcon').textContent = '🤝';
+        document.getElementById('winnerTitle').textContent = "It's a Draw!";
+        document.getElementById('winnerName').textContent = 'Both players';
+        document.getElementById('winnerStats').textContent = 'No one guessed correctly! Better luck next time!';
+        updateScoreDisplay();
+    }, 300);
+}
+
+// ============================================
+// REMATCH & NAVIGATION
+// ============================================
 function rematch() {
     playSound('click');
     document.getElementById('winnerScreen').classList.remove('active');
@@ -521,29 +536,7 @@ function rematch() {
     state.isGameOver = false;
     updateSecretDisplay1();
 }
-// ============================================
-// DRAW - Show Draw Screen
-// ============================================
-function showDraw() {
-    playSound('error');
-    
-    setTimeout(() => {
-        document.getElementById('gameScreen').classList.remove('active');
-        document.getElementById('winnerScreen').classList.add('active');
-        
-        // Draw UI
-        document.getElementById('winnerIcon').textContent = '🤝';
-        document.getElementById('winnerTitle').textContent = "It's a Draw!";
-        document.getElementById('winnerName').textContent = 'Both players';
-        document.getElementById('winnerStats').textContent = 'No one guessed correctly! Better luck next time!';
-        
-        updateScoreDisplay();
-    }, 300);
-}
 
-// ============================================
-// NAVIGATION / BACK BUTTONS
-// ============================================
 function goHome() {
     playSound('back');
     document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
@@ -555,7 +548,6 @@ function goBackToSecret1() {
     playSound('back');
     document.getElementById('secretScreen2').classList.remove('active');
     document.getElementById('secretScreen').classList.add('active');
-    // Reset player 2 secret
     state.p2Secret = null;
     state.currentGuess = '';
     updateSecretDisplay1();
@@ -569,7 +561,7 @@ function endGame() {
 }
 
 // ============================================
-// PREVENT KEYBOARD FROM SHOWING
+// PREVENT KEYBOARD
 // ============================================
 document.addEventListener('focusin', (e) => {
     if (e.target.tagName === 'INPUT' && e.target.type !== 'text') {
@@ -577,9 +569,6 @@ document.addEventListener('focusin', (e) => {
     }
 });
 
-// ============================================
-// FIX: Resume Audio Context on User Interaction
-// ============================================
 document.addEventListener('click', () => {
     if (audioCtx && audioCtx.state === 'suspended') {
         audioCtx.resume();
