@@ -85,6 +85,8 @@
     </div>
     
     <button class="btn btn-primary" onclick="startGame()">▶ START GAME</button>
+    <!-- How to Play Button -->
+<button class="btn btn-how-to-play" onclick="openHowToPlay()">📖 How to Play</button>
 </div>
 
 <!-- ===== SCREEN 3: PLAYER 1 SECRET ===== -->
@@ -225,6 +227,43 @@
         });
     }
 </script>
+<!-- ===== HOW TO PLAY MODAL ===== -->
+<div id="howToPlayModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content how-to-play-modal">
+        <div class="modal-header">
+            <h2 class="modal-title">📖 How to Play</h2>
+            <button class="modal-close-btn" onclick="closeHowToPlay()">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="how-to-play-step">
+                <span class="step-number">1</span>
+                <span class="step-text"><strong>Set Secret Numbers:</strong> Each player secretly enters a number (1-100).</span>
+            </div>
+            <div class="how-to-play-step">
+                <span class="step-number">2</span>
+                <span class="step-text"><strong>Take Turns:</strong> Players alternate guessing the opponent's secret number.</span>
+            </div>
+            <div class="how-to-play-step">
+                <span class="step-number">3</span>
+                <span class="step-text"><strong>Get Hints:</strong> After each guess, you'll get a hint - "Too High" ⬆️ or "Too Low" ⬇️.</span>
+            </div>
+            <div class="how-to-play-step">
+                <span class="step-number">4</span>
+                <span class="step-text"><strong>Win!</strong> First player to guess the opponent's number correctly wins! 🏆</span>
+            </div>
+            <div class="how-to-play-step">
+                <span class="step-number">5</span>
+                <span class="step-text"><strong>Draw:</strong> If both players use all attempts without guessing correctly, it's a draw! 🤝</span>
+            </div>
+            <div class="how-to-play-tip">
+                💡 <strong>Tip:</strong> Choose your difficulty wisely! Easy (1-50, 15 tries), Medium (1-100, 10 tries), Hard (1-200, 7 tries).
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button onclick="closeHowToPlay()" class="btn btn-primary">Got it! 👍</button>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
