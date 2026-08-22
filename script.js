@@ -386,13 +386,13 @@ function makeGuess() {
     if (state.isGameOver) return;
     const num = parseInt(state.currentGuess);
     if (!num || num < 1 || num > state.maxRange) {
-        playSound('error');
         alert('Please enter a valid number between 1 and ' + state.maxRange);
         return;
     }
     
     const isP1 = state.currentPlayer === 1;
     const secret = isP1 ? state.p2Secret : state.p1Secret;
+    const opponent = isP1 ? state.p2Name : state.p1Name;
     
     let hint = '';
     let hintClass = '';
@@ -402,7 +402,6 @@ function makeGuess() {
         hint = '🎉 CORRECT!';
         hintClass = 'hint-correct';
         isCorrect = true;
-        // Winner sound will be played in showWinner
     } else if (num > secret) {
         hint = '⬆️ Too High!';
         hintClass = 'hint-high';
@@ -413,6 +412,7 @@ function makeGuess() {
         playSound('low');
     }
     
+    // Track attempts
     if (isP1) {
         state.p1Attempts++;
         state.p1GuessHistory.push({ guess: num, hint: hint });
@@ -427,7 +427,7 @@ function makeGuess() {
     
     addHistory(isP1, num, hint);
     
-    // Check if correct
+    // === WINNER CHECK ===
     if (isCorrect) {
         if (isP1) {
             state.p1Wins++;
@@ -440,22 +440,34 @@ function makeGuess() {
         return;
     }
     
-    // Check if max attempts reached
-    const attempts = isP1 ? state.p1Attempts : state.p2Attempts;
-    if (attempts >= state.maxAttempts) {
-        const winner = isP1 ? state.p2Name : state.p1Name;
-        if (isP1) {
-            state.p2Wins++;
-            showWinner(state.p2Name, state.p2Attempts);
-        } else {
-            state.p1Wins++;
-            showWinner(state.p1Name, state.p1Attempts);
-        }
+    // === CHECK IF BOTH PLAYERS FINISHED ATTEMPTS ===
+    const totalAttempts = state.p1Attempts + state.p2Attempts;
+    const maxTotal = state.maxAttempts * 2;
+    
+    if (totalAttempts >= maxTotal) {
+        // Both players have used all attempts - DRAW!
+        showDraw();
         state.isGameOver = true;
         return;
     }
     
-    // Switch turn
+    // === CHECK IF CURRENT PLAYER FINISHED ATTEMPTS ===
+    const currentAttempts = isP1 ? state.p1Attempts : state.p2Attempts;
+    if (currentAttempts >= state.maxAttempts) {
+        // Current player finished, switch to other player
+        state.currentPlayer = isP1 ? 2 : 1;
+        state.currentGuess = '';
+        updateGuessDisplay();
+        updateGameUI();
+        updateScoreDisplay();
+        
+        // Show notification
+        hintBox.textContent = '⏳ ' + (isP1 ? state.p2Name : state.p1Name) + '\'s turn now!';
+        hintBox.className = 'hint-box hint-empty';
+        return;
+    }
+    
+    // === SWITCH TURN ===
     state.currentPlayer = isP1 ? 2 : 1;
     state.currentGuess = '';
     updateGuessDisplay();
@@ -508,6 +520,25 @@ function rematch() {
     state.currentGuess = '';
     state.isGameOver = false;
     updateSecretDisplay1();
+}
+// ============================================
+// DRAW - Show Draw Screen
+// ============================================
+function showDraw() {
+    playSound('error');
+    
+    setTimeout(() => {
+        document.getElementById('gameScreen').classList.remove('active');
+        document.getElementById('winnerScreen').classList.add('active');
+        
+        // Draw UI
+        document.getElementById('winnerIcon').textContent = '🤝';
+        document.getElementById('winnerTitle').textContent = "It's a Draw!";
+        document.getElementById('winnerName').textContent = 'Both players';
+        document.getElementById('winnerStats').textContent = 'No one guessed correctly! Better luck next time!';
+        
+        updateScoreDisplay();
+    }, 300);
 }
 
 // ============================================
