@@ -5,17 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Guess It!</title>
     
-    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
-    
-    <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
-    
-    <!-- Icons -->
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
     
-    <!-- iOS Support -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Guess It!">
@@ -23,15 +17,13 @@
     <meta name="theme-color" content="#6C63FF">
     
     <!-- ============================================ -->
-    <!-- 📢 ADMOB SDK (SAMPLE - TEST ADS)              -->
+    <!-- 📢 ADMOB SDK                                 -->
     <!-- ============================================ -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1956830239755898" crossorigin="anonymous"></script>
 </head>
 <body>
 
-<!-- ============================================ -->
-<!-- SCREEN 1: LOADING                            -->
-<!-- ============================================ -->
+<!-- ===== LOADING SCREEN ===== -->
 <div id="loadingScreen" class="screen active">
     <div class="loading-icon">🎯</div>
     <div class="loading-title">Guess It!</div>
@@ -42,9 +34,7 @@
     <div class="loading-text" id="loadingText">Loading...</div>
 </div>
 
-<!-- ============================================ -->
-<!-- SCREEN 2: START                              -->
-<!-- ============================================ -->
+<!-- ===== START SCREEN ===== -->
 <div id="startScreen" class="screen">
     <div class="game-logo">🎯</div>
     <div class="game-title">Guess It!</div>
@@ -59,7 +49,6 @@
         <input type="text" id="player2Name" placeholder="Enter name" value="Player 2" maxlength="15">
     </div>
     
-    <!-- Difficulty Button -->
     <div class="difficulty-btn" onclick="toggleDifficulty()">
         <span id="diffDisplay">⚡ Medium</span>
         <span class="arrow" id="diffArrow">▼</span>
@@ -79,7 +68,6 @@
         </div>
     </div>
     
-    <!-- Settings Row -->
     <div class="settings-row">
         <div class="settings-item">
             🔊 <input type="range" id="volumeSlider" min="0" max="100" value="50" onchange="changeVolume(this.value)">
@@ -110,37 +98,30 @@
         </script>
     </div>
     
-    <!-- How to Play Button -->
     <button class="btn btn-how-to-play" onclick="openHowToPlay()">📖 How to Play</button>
 </div>
 
-<!-- ============================================ -->
-<!-- SCREEN 3: PLAYER 1 SECRET                   -->
-<!-- ============================================ -->
+<!-- ===== PLAYER 1 SECRET ===== -->
 <div id="secretScreen" class="screen">
     <div class="screen-header">
         <button class="btn-back" onclick="goHome()">← Back</button>
         <span></span>
     </div>
-    
     <div class="secret-icon">🔒</div>
     <div class="secret-title" id="secretTitle1">Player 1: Set Secret Number</div>
     <div class="secret-display" id="secretDisplay1">
         <span class="placeholder-text">Enter your secret number</span>
     </div>
     <div class="secret-hint">Enter a number between 1 and <span id="secretRange1">100</span></div>
-    
     <div class="num-pad">
         <button class="number-btn" onclick="numPad1('1')">1</button>
         <button class="number-btn" onclick="numPad1('2')">2</button>
         <button class="number-btn" onclick="numPad1('3')">3</button>
         <button class="number-btn btn-x" onclick="numPad1('delete')">✕</button>
-        
         <button class="number-btn" onclick="numPad1('4')">4</button>
         <button class="number-btn" onclick="numPad1('5')">5</button>
         <button class="number-btn" onclick="numPad1('6')">6</button>
         <button class="number-btn btn-enter" onclick="confirmSecret1()">✓</button>
-        
         <button class="number-btn" onclick="numPad1('7')">7</button>
         <button class="number-btn" onclick="numPad1('8')">8</button>
         <button class="number-btn" onclick="numPad1('9')">9</button>
@@ -148,33 +129,27 @@
     </div>
 </div>
 
-<!-- ============================================ -->
-<!-- SCREEN 4: PLAYER 2 SECRET                   -->
-<!-- ============================================ -->
+<!-- ===== PLAYER 2 SECRET ===== -->
 <div id="secretScreen2" class="screen">
     <div class="screen-header">
         <button class="btn-back" onclick="goBackToSecret1()">← Back</button>
         <span></span>
     </div>
-    
     <div class="secret-icon">🔒</div>
     <div class="secret-title" id="secretTitle2">Player 2: Set Secret Number</div>
     <div class="secret-display" id="secretDisplay2">
         <span class="placeholder-text">Enter your secret number</span>
     </div>
     <div class="secret-hint">Enter a number between 1 and <span id="secretRange2">100</span></div>
-    
     <div class="num-pad">
         <button class="number-btn" onclick="numPad2('1')">1</button>
         <button class="number-btn" onclick="numPad2('2')">2</button>
         <button class="number-btn" onclick="numPad2('3')">3</button>
         <button class="number-btn btn-x" onclick="numPad2('delete')">✕</button>
-        
         <button class="number-btn" onclick="numPad2('4')">4</button>
         <button class="number-btn" onclick="numPad2('5')">5</button>
         <button class="number-btn" onclick="numPad2('6')">6</button>
         <button class="number-btn btn-enter" onclick="confirmSecret2()">✓</button>
-        
         <button class="number-btn" onclick="numPad2('7')">7</button>
         <button class="number-btn" onclick="numPad2('8')">8</button>
         <button class="number-btn" onclick="numPad2('9')">9</button>
@@ -182,9 +157,7 @@
     </div>
 </div>
 
-<!-- ============================================ -->
-<!-- SCREEN 5: GAMEPLAY                          -->
-<!-- ============================================ -->
+<!-- ===== GAMEPLAY ===== -->
 <div id="gameScreen" class="screen">
     <div class="screen-header">
         <button class="btn-back" onclick="endGame()">← End Game</button>
@@ -201,18 +174,15 @@
         <div class="guess-display" id="guessDisplay">
             <span class="placeholder-text">Enter your guess</span>
         </div>
-        
         <div class="num-pad" style="max-width: 320px;">
             <button class="number-btn" onclick="numGuess('1')">1</button>
             <button class="number-btn" onclick="numGuess('2')">2</button>
             <button class="number-btn" onclick="numGuess('3')">3</button>
             <button class="number-btn btn-x" onclick="numGuess('delete')">✕</button>
-            
             <button class="number-btn" onclick="numGuess('4')">4</button>
             <button class="number-btn" onclick="numGuess('5')">5</button>
             <button class="number-btn" onclick="numGuess('6')">6</button>
             <button class="number-btn btn-enter" onclick="makeGuess()">✓</button>
-            
             <button class="number-btn" onclick="numGuess('7')">7</button>
             <button class="number-btn" onclick="numGuess('8')">8</button>
             <button class="number-btn" onclick="numGuess('9')">9</button>
@@ -245,7 +215,7 @@
         <ins class="adsbygoogle"
              style="display:block"
              data-ad-client="ca-pub-1956830239755898"
-             data-ad-slot="ca-app-pub-3940256099942544/6300978111"
+             data-ad-slot="ca-app-pub-1956830239755898~9789384741"
              data-ad-format="auto"
              data-full-width-responsive="true"></ins>
         <script>
@@ -254,15 +224,12 @@
     </div>
 </div>
 
-<!-- ============================================ -->
-<!-- SCREEN 6: WINNER / DRAW                     -->
-<!-- ============================================ -->
+<!-- ===== WINNER / DRAW ===== -->
 <div id="winnerScreen" class="screen">
     <div class="screen-header">
         <button class="btn-back" onclick="goHome()">← Home</button>
         <span></span>
     </div>
-    
     <div class="winner-icon" id="winnerIcon">🏆</div>
     <div class="winner-title" id="winnerTitle">Winner!</div>
     <div class="winner-name" id="winnerName">Player 1</div>
@@ -273,9 +240,7 @@
     </div>
 </div>
 
-<!-- ============================================ -->
-<!-- HOW TO PLAY MODAL                           -->
-<!-- ============================================ -->
+<!-- ===== HOW TO PLAY MODAL ===== -->
 <div id="howToPlayModal" class="modal-overlay" style="display: none;">
     <div class="modal-content how-to-play-modal">
         <div class="modal-header">
@@ -328,4 +293,4 @@
 </script>
 
 </body>
-</html>
+    </html>
