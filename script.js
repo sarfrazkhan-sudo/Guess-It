@@ -559,6 +559,28 @@ function endGame() {
         goHome();
     }
 }
+// ============================================
+// HOW TO PLAY - Open/Close
+// ============================================
+function openHowToPlay() {
+    playSound('click');
+    document.getElementById('howToPlayModal').style.display = 'flex';
+    document.getElementById('howToPlayModal').classList.add('active');
+}
+
+function closeHowToPlay() {
+    playSound('back');
+    document.getElementById('howToPlayModal').style.display = 'none';
+    document.getElementById('howToPlayModal').classList.remove('active');
+}
+
+// Close modal when clicking outside
+document.addEventListener('click', function(event) {
+    const modal = document.getElementById('howToPlayModal');
+    if (event.target === modal) {
+        closeHowToPlay();
+    }
+});
 
 // ============================================
 // PREVENT KEYBOARD
