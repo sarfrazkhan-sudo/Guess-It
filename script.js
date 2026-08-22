@@ -1,18 +1,21 @@
 // ============================================
-// AD TEST MODE - ENABLE FOR DEVELOPMENT
+// 📢 AD TEST MODE - ENABLE FOR DEVELOPMENT
 // ============================================
 window.adsbygoogle = window.adsbygoogle || [];
 
-// Enable test mode for your device
 function enableTestAds() {
-    (adsbygoogle = window.adsbygoogle || []).push({
-        google_ad_client: "ca-app-pub-1956830239755898/9566023467",
-        enable_page_level_ads: true
-    });
+    try {
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-1956830239755898",
+            enable_page_level_ads: true
+        });
+        console.log('✅ AdMob test mode enabled');
+    } catch(e) {
+        console.log('⚠️ AdMob error:', e);
+    }
 }
-
-// Call this function when game loads
 enableTestAds();
+
 // ============================================
 // GAME STATE
 // ============================================
@@ -56,6 +59,8 @@ function startLoading() {
             setTimeout(() => {
                 document.getElementById('loadingScreen').classList.remove('active');
                 document.getElementById('startScreen').classList.add('active');
+                // Refresh ads after loading
+                setTimeout(refreshAds, 2000);
             }, 300);
         }
         loadingBar.style.width = loadingProgress + '%';
@@ -66,6 +71,18 @@ function startLoading() {
 }
 
 window.onload = startLoading;
+
+// ============================================
+// ADMOB - REFRESH ADS
+// ============================================
+function refreshAds() {
+    try {
+        (adsbygoogle = window.adsbygoogle || []).push({});
+        console.log('✅ Ads refreshed');
+    } catch(e) {
+        console.log('⚠️ Ad refresh error:', e);
+    }
+}
 
 // ============================================
 // THEME
@@ -348,6 +365,7 @@ function startRound() {
     document.getElementById('hintBox').className = 'hint-box hint-empty';
     document.getElementById('historyBox').innerHTML = '<div class="history-empty">📜 No guesses yet</div>';
     updateScoreDisplay();
+    refreshAds();
 }
 
 function updateGameUI() {
@@ -391,7 +409,7 @@ function numGuess(val) {
 }
 
 // ============================================
-// MAKE GUESS (FIXED - DRAW SYSTEM)
+// MAKE GUESS (DRAW SYSTEM)
 // ============================================
 function makeGuess() {
     if (state.isGameOver) return;
@@ -424,7 +442,6 @@ function makeGuess() {
         playSound('low');
     }
     
-    // Track attempts and history
     if (isP1) {
         state.p1Attempts++;
         state.p1GuessHistory.push({ guess: num, hint: hint });
@@ -439,7 +456,6 @@ function makeGuess() {
     
     addHistory(isP1, num, hint);
     
-    // ==== CHECK: CORRECT GUESS =====
     if (isCorrect) {
         if (isP1) {
             state.p1Wins++;
@@ -449,38 +465,37 @@ function makeGuess() {
             showWinner(state.p2Name, state.p2Attempts);
         }
         state.isGameOver = true;
+        refreshAds();
         return;
     }
     
-    // ==== CHECK: BOTH PLAYERS FINISHED ALL ATTEMPTS =====
     if (state.p1Attempts >= state.maxAttempts && state.p2Attempts >= state.maxAttempts) {
         showDraw();
         state.isGameOver = true;
+        refreshAds();
         return;
     }
     
-    // ==== CHECK: CURRENT PLAYER FINISHED ATTEMPTS =====
     const currentAttempts = isP1 ? state.p1Attempts : state.p2Attempts;
     if (currentAttempts >= state.maxAttempts) {
-        // Switch to other player
         state.currentPlayer = isP1 ? 2 : 1;
         state.currentGuess = '';
         updateGuessDisplay();
         updateGameUI();
         updateScoreDisplay();
-        
         const nextPlayer = isP1 ? state.p2Name : state.p1Name;
         hintBox.textContent = '⏳ ' + nextPlayer + '\'s turn now!';
         hintBox.className = 'hint-box hint-empty';
+        refreshAds();
         return;
     }
     
-    // ==== SWITCH TURN (Normal) =====
     state.currentPlayer = isP1 ? 2 : 1;
     state.currentGuess = '';
     updateGuessDisplay();
     updateGameUI();
     updateScoreDisplay();
+    refreshAds();
 }
 
 // ============================================
@@ -516,6 +531,7 @@ function showWinner(name, attempts) {
         document.getElementById('winnerName').textContent = name + ' 🎉';
         document.getElementById('winnerStats').textContent = 'Guessed correctly in ' + attempts + ' attempts!';
         updateScoreDisplay();
+        refreshAds();
     }, 200);
 }
 
@@ -533,6 +549,7 @@ function showDraw() {
         document.getElementById('winnerName').textContent = 'Both players';
         document.getElementById('winnerStats').textContent = 'No one guessed correctly! Better luck next time!';
         updateScoreDisplay();
+        refreshAds();
     }, 300);
 }
 
@@ -550,6 +567,7 @@ function rematch() {
     state.currentGuess = '';
     state.isGameOver = false;
     updateSecretDisplay1();
+    refreshAds();
 }
 
 function goHome() {
@@ -557,6 +575,7 @@ function goHome() {
     document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
     document.getElementById('startScreen').classList.add('active');
     state.isGameOver = false;
+    refreshAds();
 }
 
 function goBackToSecret1() {
@@ -574,8 +593,9 @@ function endGame() {
         goHome();
     }
 }
+
 // ============================================
-// HOW TO PLAY - Open/Close
+// HOW TO PLAY
 // ============================================
 function openHowToPlay() {
     playSound('click');
@@ -589,7 +609,6 @@ function closeHowToPlay() {
     document.getElementById('howToPlayModal').classList.remove('active');
 }
 
-// Close modal when clicking outside
 document.addEventListener('click', function(event) {
     const modal = document.getElementById('howToPlayModal');
     if (event.target === modal) {
