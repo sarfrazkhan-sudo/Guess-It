@@ -6,7 +6,7 @@ window.adsbygoogle = window.adsbygoogle || [];
 // Enable test mode for your device
 function enableTestAds() {
     (adsbygoogle = window.adsbygoogle || []).push({
-        google_ad_client: "ca-pub-1956830239755898",
+        google_ad_client: "ca-app-pub-1956830239755898/8926844736",
         enable_page_level_ads: true
     });
 }
