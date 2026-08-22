@@ -745,3 +745,23 @@ body.light-mode .btn-back:active {
         padding: 0 0 4px 0;
     }
 }
+/* === DRAW SCREEN === */
+#winnerScreen .winner-icon {
+    font-size: 80px;
+    animation: bounce 1s ease infinite;
+}
+
+/* Draw ke liye extra animation */
+.draw-icon {
+    animation: drawPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes drawPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1) rotate(10deg); }
+}
+
+/* Draw title color */
+#winnerTitle.draw-title {
+    color: #FFD93D;
+}
